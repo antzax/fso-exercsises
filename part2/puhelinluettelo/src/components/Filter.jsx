@@ -1,8 +1,12 @@
-const Filter = ({searchValue, onSearchChange}) => {
+const Filter = ({ searchValue, setSearch }) => {
   return (
     <div>
       <p>
-        filter show with <input value={searchValue} onChange={onSearchChange} />
+        filter show with{" "}
+        <input
+          value={searchValue}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </p>
     </div>
   );
