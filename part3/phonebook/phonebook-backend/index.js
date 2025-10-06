@@ -5,6 +5,8 @@ const PORT = 3001;
 const app = express();
 app.use(express.json());
 
+app.use(express.static("dist"))
+
 morgan.token("body", function (req) {
   return JSON.stringify(req.body);
 });
@@ -74,8 +76,6 @@ const generateId = () => {
 app.post("/api/persons", (req, res) => {
   const body = req.body;
 
-  const names = persons.map((p) => p.name);
-
   if (!body.name || !body.number) {
     return res.status(400).json({
       error: "content missing",
@@ -93,8 +93,9 @@ app.post("/api/persons", (req, res) => {
     name: body.name,
     number: body.number,
   };
-
+  
   persons = persons.concat(newPerson);
+  console.log(persons)
 
   res.json(newPerson);
 });
