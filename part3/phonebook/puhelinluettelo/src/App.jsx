@@ -12,11 +12,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
   const [notification, setNotification] = useState({ message: null });
-
+  
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
+      console.log("running")
       setPersons(initialPersons);
-    });
+    }).catch(err => console.log(err));
   }, []);
 
   const personsToShow = persons.filter((person) =>
