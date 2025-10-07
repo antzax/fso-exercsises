@@ -1,3 +1,3 @@
 # Fullstack open
 
-(![mighty night](image.png))
+![mighty night](image.png)
