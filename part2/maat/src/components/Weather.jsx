@@ -6,7 +6,6 @@ const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
 const Weather = ({ country }) => {
   const [weather, setWeather] = useState(null);
-  console.log(weather);
 
   useEffect(() => {
     const [lat, lon] = country.capitalInfo.latlng;
