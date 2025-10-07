@@ -10,19 +10,21 @@ const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
-  const [filter, setFilter] = useState("");
+  const [search, setSearch] = useState("");
   const [notification, setNotification] = useState({ message: null });
-  
+
   useEffect(() => {
-    personService.getAll().then((initialPersons) => {
-      console.log("running")
-      setPersons(initialPersons);
-    }).catch(err => console.log(err));
+    personService
+      .getAll()
+      .then((initialPersons) => {
+        setPersons(initialPersons);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
-  const personsToShow = persons.filter((person) =>
-    person.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  const personsToShow = persons.filter((person) => {
+    return person.name.toLowerCase().includes(search.toLowerCase());
+  });
 
   const clearForm = () => {
     setNewName("");
@@ -93,13 +95,13 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <Notification notification={notification} />
-      <Filter filter={filter} setFilter={setFilter} />
+      <Filter searchValue={search} setSearch={setSearch} />
 
       <h2>Add a new</h2>
       <PersonForm
         newName={newName}
         newNumber={newNumber}
-        onAddNew={onAddNew}
+        onSubmit={onAddNew}
         setNewName={setNewName}
         setNewNumber={setNewNumber}
       />
