@@ -11,7 +11,14 @@ mongoose
   .then(() => console.log("Connected to database!"))
   .catch((err) => console.log(err));
 
-const personSchema = new mongoose.Schema({ name: String, number: String });
+const personSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minLength: 3
+  },
+  number: String 
+});
 
 personSchema.set("toJSON", {
   transform: (document, returnedObject) => {

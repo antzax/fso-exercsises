@@ -19,11 +19,11 @@ const App = () => {
       .then((initialPersons) => {
         setPersons(initialPersons);
       })
-      .catch((err) => console.log(err));
+      .catch((error) => notifyWith(error.response.data, true));
   }, []);
 
   const personsToShow = persons.filter((person) => {
-    return person.name.toLowerCase().includes(search.toLowerCase());
+    return person.name?.toLowerCase().includes(search.toLowerCase());
   });
 
   const clearForm = () => {
@@ -77,6 +77,9 @@ const App = () => {
         setPersons(persons.concat(createdPerson));
         notifyWith(`Added ${createdPerson.name}`);
         clearForm();
+      })
+      .catch((error) => {
+        notifyWith(error.response.data, true);
       });
   };
 

@@ -24,7 +24,7 @@ app.get("/api/persons", (req, res, next) => {
     .catch((err) => next);
 });
 
-app.get("/api/info", (req, res) => {
+app.get("/api/info", (req, re, next) => {
   Person.find({})
     .then((persons) => {
       res.send(`Phonebook has info for ${persons.length} 
@@ -56,28 +56,18 @@ app.delete("/api/persons/:id", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-app.post("/api/persons", async (req, res) => {
-  const body = req.body;
-
-  if (!body.name || !body.number) {
-    return res.status(400).json({
-      error: "content missing",
-    });
-  }
-
-  const existing = await Person.findOne({ name: body.name });
-  if (existing) {
-    return res.status(400).json({ error: "name must be unique " });
-  }
-
+app.post("/api/persons", async (req, res, next) => {
   const newPerson = new Person({
-    name: body.name,
-    number: body.number,
+    name: req.body.name,
+    number: req.body.number,
   });
 
-  newPerson.save().then((newPerson) => {
-    res.json(newPerson);
-  });
+  newPerson
+    .save()
+    .then((newPerson) => {
+      res.json(newPerson);
+    })
+    .catch((err) => next(err));
 });
 
 app.put("/api/persons/:id", (req, res, next) => {
@@ -104,6 +94,8 @@ const errorHandler = (err, req, res, next) => {
 
   if (err.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
+  } else if (err.name === "ValidationError") {
+    return res.status(400).json(err.message);
   }
 
   next(err);
