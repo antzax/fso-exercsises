@@ -38,10 +38,16 @@ app.get("/api/persons/:id", (req, res) => {
     });
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  Person.findByIdAndDelete(req.params.id).then((person) =>
-    res.status(204).end()
-  );
+app.delete("/api/persons/:id", (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.status(404).end();
+      } else {
+        res.status(204).end();
+      }
+    })
+    .catch((err) => next(err));
 });
 
 app.post("/api/persons", async (req, res) => {
