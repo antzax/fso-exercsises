@@ -74,8 +74,27 @@ app.post("/api/persons", async (req, res) => {
   });
 });
 
+app.put("/api/persons/:id", (req, res, next) => {
+  const { name, number } = req.body;
+
+  Person.findById(req.body.id)
+    .then((person) => {
+      if (!person) {
+        return res.status(404).end();
+      }
+
+      person.name = name;
+      person.number = number;
+
+      person.save().then((savedPerson) => {
+        res.json(savedPerson);
+      });
+    })
+    .catch((err) => next(err));
+});
+
 const errorHandler = (err, req, res, next) => {
-  console.error(error.message);
+  console.error(err.message);
 
   if (err.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
