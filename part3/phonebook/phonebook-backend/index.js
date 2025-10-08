@@ -18,16 +18,19 @@ app.use(
   )
 );
 
-app.get("/api/persons", (req, res) => {
-  Person.find({}).then((persons) => res.json(persons));
+app.get("/api/persons", (req, res, next) => {
+  Person.find({})
+    .then((persons) => res.json(persons))
+    .catch((err) => next);
 });
 
-app.get("/info", (req, res) => {
-  res.send(`<p>Phonebook has info for ${Person.find({}).then(
-    (persons) => persons.length
-  )} people</p><p>
-  ${new Date()}
-    </p>`);
+app.get("/api/info", (req, res) => {
+  Person.find({})
+    .then((persons) => {
+      res.send(`Phonebook has info for ${persons.length} 
+        ${new Date()}`);
+    })
+    .catch((err) => next);
 });
 
 app.get("/api/persons/:id", (req, res, next) => {
