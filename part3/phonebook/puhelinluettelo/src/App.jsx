@@ -52,12 +52,17 @@ const App = () => {
           notifyWith(`Phonenumber of ${updatedPerson.name} updated!`);
           clearForm();
         })
-        .catch(() => {
-          notifyWith(
-            `Information of ${person.name} has already been removed from server`,
-            true
-          );
-          setPersons(persons.filter((p) => p.name !== person.name));
+        .catch((error) => {
+          console.log(error);
+          if (error.response.data.name === "ValidationError") {
+            notifyWith(error.response.data.message, true);
+          } else {
+            notifyWith(
+              `Information of ${person.name} has already been removed from server`,
+              true
+            );
+            setPersons(persons.filter((p) => p.name !== person.name));
+          }
         });
     }
   };
@@ -79,7 +84,7 @@ const App = () => {
         clearForm();
       })
       .catch((error) => {
-        notifyWith(error.response.data, true);
+        notifyWith(error.response.data.message, true);
       });
   };
 
