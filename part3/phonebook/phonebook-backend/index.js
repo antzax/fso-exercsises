@@ -30,12 +30,15 @@ app.get("/info", (req, res) => {
     </p>`);
 });
 
-app.get("/api/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res, next) => {
   Person.findById(req.params.id)
-    .then((person) => res.json(person))
-    .catch((err) => {
-      res.status(404).end();
-    });
+    .then((person) => {
+      if (!person) {
+        return res.status(404).end();
+      }
+      res.json(person);
+    })
+    .catch((err) => next(err));
 });
 
 app.delete("/api/persons/:id", (req, res, next) => {
