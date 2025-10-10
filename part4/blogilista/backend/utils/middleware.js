@@ -5,6 +5,7 @@ const requestLogger = (req, res, next) => {
   logger.info("Path:", req.path);
   logger.info("Body:", req.body);
   logger.info("---");
+  next()
 };
 
 const unknownEndpoint = (req, res) => {
