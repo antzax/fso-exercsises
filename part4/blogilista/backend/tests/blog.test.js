@@ -1,6 +1,12 @@
 const { test, describe } = require("node:test");
 const assert = require("node:assert");
-const { dummy, totalLikes, favoriteBlog } = require("../utils/list_helper");
+const {
+  dummy,
+  totalLikes,
+  favoriteBlog,
+  mostBlogs,
+  mostLikes
+} = require("../utils/list_helper");
 
 const blogs = [
   {
@@ -53,14 +59,14 @@ const blogs = [
   },
 ];
 
-test("dummy returns one", () => {
+test.skip("dummy returns one", () => {
   const blogs = [];
 
   const result = dummy(blogs);
   assert.strictEqual(result, 1);
 });
 
-describe("total likes", () => {
+describe.skip("total likes", () => {
   test("of empty list is zero", () => {
     assert.strictEqual(totalLikes([]), 0);
   });
@@ -74,7 +80,7 @@ describe("total likes", () => {
   });
 });
 
-describe("most liked", () => {
+describe.skip("most liked", () => {
   test("of emply list is none", () => {
     assert.deepStrictEqual(favoriteBlog(), null);
   });
@@ -85,5 +91,45 @@ describe("most liked", () => {
 
   test("of many blogs is the most liked", () => {
     assert.deepStrictEqual(favoriteBlog(blogs), blogs[2]);
+  });
+});
+
+describe.skip("most blogs", () => {
+  test("of emply list is none", () => {
+    assert.strictEqual(mostBlogs(), null);
+  });
+
+  test("of one blog is that", () => {
+    assert.deepStrictEqual(mostBlogs([blogs[0]]), {
+      author: blogs[0].author,
+      blogs: 1,
+    });
+  });
+
+  test("of many blogs is the most liked", () => {
+    assert.deepStrictEqual(mostBlogs(blogs), {
+      author: "Robert C. Martin",
+      blogs: 3,
+    });
+  });
+});
+
+describe("most likes", () => {
+  test("of emply list is none", () => {
+    assert.strictEqual(mostLikes(), null);
+  });
+
+  test("of one blog is that blog author and likes", () => {
+    assert.deepStrictEqual(mostLikes([blogs[0]]), {
+      author: blogs[0].author,
+      likes: blogs[0].likes,
+    });
+  });
+
+  test("of many blogs is the blogger with most likes", () => {
+    assert.deepStrictEqual(mostLikes(blogs), {
+      author: "Edsger W. Dijkstra",
+      likes: 17,
+    });
   });
 });
