@@ -11,9 +11,7 @@ const blogUrl = "/api/blogs";
 
 beforeEach(async () => {
   await Blog.deleteMany({});
-  console.log("deleted blogs");
   await Blog.insertMany(helper.initialBlogs);
-  console.log("added blogs");
 });
 
 describe("when there is notes in database", () => {
