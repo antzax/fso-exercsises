@@ -88,6 +88,22 @@ describe("when there is notes in database", () => {
 
     assert.strictEqual(blogsAfter.length, initialBlogs.length - 1);
   });
+
+  test("blogs can be edited", async () => {
+    const initialBlogs = await helper.blogsInDb();
+    const id = initialBlogs[0].id;
+    const likes = initialBlogs[0].likes + 1;
+
+    await api
+      .put(`${blogUrl}/${id}`)
+      .send({ likes })
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const blogsAfter = await helper.blogsInDb();
+
+    assert.strictEqual(blogsAfter[0].likes, likes);
+  });
 });
 
 after(async () => {
