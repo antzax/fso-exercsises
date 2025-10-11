@@ -59,14 +59,14 @@ const blogs = [
   },
 ];
 
-test.skip("dummy returns one", () => {
+test("dummy returns one", () => {
   const blogs = [];
 
   const result = dummy(blogs);
   assert.strictEqual(result, 1);
 });
 
-describe.skip("total likes", () => {
+describe("total likes", () => {
   test("of empty list is zero", () => {
     assert.strictEqual(totalLikes([]), 0);
   });
@@ -80,7 +80,7 @@ describe.skip("total likes", () => {
   });
 });
 
-describe.skip("most liked", () => {
+describe("most liked", () => {
   test("of emply list is none", () => {
     assert.deepStrictEqual(favoriteBlog(), null);
   });
@@ -94,7 +94,7 @@ describe.skip("most liked", () => {
   });
 });
 
-describe.skip("most blogs", () => {
+describe("most blogs", () => {
   test("of emply list is none", () => {
     assert.strictEqual(mostBlogs(), null);
   });
