@@ -51,10 +51,16 @@ const initialBlogs = [
   },
 ];
 
+const newBlog = {
+  title: "Understanding Async/Await in JavaScript",
+  author: "Jane Doe",
+  url: "https://example.com/async-await-guide",
+  likes: 42,
+};
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({});
   return blogs.map((blog) => blog.toJSON());
 };
 
-module.exports = { initialBlogs, blogsInDb };
+module.exports = { initialBlogs, blogsInDb, newBlog };
