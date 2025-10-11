@@ -5,7 +5,7 @@ const app = require("../app");
 
 const api = supertest(app);
 
-test("blogs are returned as json", async () => {
+test.only("blogs are returned as json", async () => {
   try {
 
     await api
