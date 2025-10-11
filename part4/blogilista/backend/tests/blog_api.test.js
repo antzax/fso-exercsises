@@ -44,21 +44,43 @@ describe("blogs api", () => {
     );
   });
 
-  test.only("if blog likes is null set it to zero", async () => {
+  test("if blog likes is null set it to zero", async () => {
     const blogWithoutLikes = {
       title: "Without likes",
       author: "Anton",
       url: "http://withoutlikes.com",
-    }
+    };
 
     const response = await api
       .post("/api/blogs")
       .send(blogWithoutLikes)
       .expect(201)
-      .expect("Content-Type", /application\/json/)
-    
-    assert.strictEqual(response.body.likes, 0)
-  })
+      .expect("Content-Type", /application\/json/);
+
+    assert.strictEqual(response.body.likes, 0);
+  });
+
+  test.only("if blog has no title or url, should response with status 400", async () => {
+    const blogWithoutTitle = {
+      author: "Anton",
+      url: "http://withouttitle.com",
+    };
+
+    const blogWithoutUrl = {
+      title: "Without url",
+      author: "Anton",
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(blogWithoutTitle)
+      .expect(400)
+
+    await api
+      .post("/api/blogs")
+      .send(blogWithoutUrl)
+      .expect(400)
+  });
 });
 
 after(async () => {
