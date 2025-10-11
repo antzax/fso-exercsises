@@ -7,6 +7,8 @@ const helper = require("../utils/blog_helper");
 const api = supertest(app);
 const Blog = require("../models/blog");
 
+const blogUrl = "/api/blogs";
+
 beforeEach(async () => {
   await Blog.deleteMany({});
   console.log("deleted blogs");
@@ -14,10 +16,10 @@ beforeEach(async () => {
   console.log("added blogs");
 });
 
-describe("blogs api", () => {
+describe("when there is notes in database", () => {
   test("blogs are returned as json", async () => {
     await api
-      .get("/api/blogs")
+      .get(blogUrl)
       .expect(200)
       .expect("Content-Type", /application\/json/);
   });
@@ -27,11 +29,43 @@ describe("blogs api", () => {
     assert("id" in blogs[0]);
   });
 
+  test("if blog likes is null set it to zero", async () => {
+    const blogWithoutLikes = {
+      title: "Without likes",
+      author: "Anton",
+      url: "http://withoutlikes.com",
+    };
+
+    const response = await api
+      .post(blogUrl)
+      .send(blogWithoutLikes)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    assert.strictEqual(response.body.likes, 0);
+  });
+
+  test("if blog has no title or url, should response with status 400", async () => {
+    const blogWithoutTitle = {
+      author: "Anton",
+      url: "http://withouttitle.com",
+    };
+
+    const blogWithoutUrl = {
+      title: "Without url",
+      author: "Anton",
+    };
+
+    await api.post(blogUrl).send(blogWithoutTitle).expect(400);
+
+    await api.post(blogUrl).send(blogWithoutUrl).expect(400);
+  });
+
   test("blogs can be added", async () => {
     const initialBlogs = await helper.blogsInDb();
 
     await api
-      .post("/api/blogs")
+      .post(blogUrl)
       .send(helper.newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -44,42 +78,15 @@ describe("blogs api", () => {
     );
   });
 
-  test("if blog likes is null set it to zero", async () => {
-    const blogWithoutLikes = {
-      title: "Without likes",
-      author: "Anton",
-      url: "http://withoutlikes.com",
-    };
+  test("blogs can be deleted", async () => {
+    const initialBlogs = await helper.blogsInDb();
+    const id = initialBlogs[0].id;
 
-    const response = await api
-      .post("/api/blogs")
-      .send(blogWithoutLikes)
-      .expect(201)
-      .expect("Content-Type", /application\/json/);
+    await api.delete(`${blogUrl}/${id}`).expect(204);
 
-    assert.strictEqual(response.body.likes, 0);
-  });
+    const blogsAfter = await helper.blogsInDb();
 
-  test.only("if blog has no title or url, should response with status 400", async () => {
-    const blogWithoutTitle = {
-      author: "Anton",
-      url: "http://withouttitle.com",
-    };
-
-    const blogWithoutUrl = {
-      title: "Without url",
-      author: "Anton",
-    };
-
-    await api
-      .post("/api/blogs")
-      .send(blogWithoutTitle)
-      .expect(400)
-
-    await api
-      .post("/api/blogs")
-      .send(blogWithoutUrl)
-      .expect(400)
+    assert.strictEqual(blogsAfter.length, initialBlogs.length - 1);
   });
 });
 
