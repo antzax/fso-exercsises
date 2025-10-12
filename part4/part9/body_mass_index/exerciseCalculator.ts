@@ -1,3 +1,5 @@
+import parseArguments from "./parseArguments.ts";
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -7,7 +9,7 @@ interface Result {
   target: number;
   average: number;
 }
-const calculateExercises = (exercises: number[], target: number): Result => {
+const calculateExercises = (target: number, exercises: number[]): Result => {
   const periodLength = exercises.length;
   const trainingDays = exercises.filter((hours) => hours > 0).length;
 
@@ -43,7 +45,13 @@ const calculateExercises = (exercises: number[], target: number): Result => {
   };
 };
 
-const exerciseHours = [3, 0, 2, 4.5, 0, 3, 1];
-const target = 2;
-
-console.log(calculateExercises(exerciseHours, target));
+try {
+  const [target, ...days] = parseArguments(...process.argv.slice(2));
+  console.log(calculateExercises(target, days));
+} catch (error) {
+  let errorMessage = "Something unexpected happened. ";
+  if (error instanceof Error) {
+    errorMessage += error.message;
+  }
+  console.log(errorMessage);
+}

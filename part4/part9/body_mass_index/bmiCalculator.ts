@@ -1,5 +1,6 @@
 import parseArguments from "./parseArguments.ts";
 
+
 const calculateBmi = (height: number, weight: number): string => {
   const heightSquaredInMeters = (height / 100) ** 2;
   const bmi = weight / heightSquaredInMeters;
@@ -16,13 +17,13 @@ const calculateBmi = (height: number, weight: number): string => {
 };
 
 try {
-  const [height, weight] = parseArguments(process.argv[2], process.argv[3])
-  const bmi = calculateBmi(height, weight)
-  console.log(`You are: ${bmi}`)
+  const [height, weight] = parseArguments(process.argv[2], process.argv[3]);
+  const bmi = calculateBmi(height, weight);
+  console.log(`You are: ${bmi}`);
 } catch (error) {
-  let errorMessage = "Something unexpected happened. "
+  let errorMessage = "Something unexpected happened. ";
   if (error instanceof Error) {
-    errorMessage += error.message
+    errorMessage += error.message;
   }
-  console.log(errorMessage)
+  console.log(errorMessage);
 }

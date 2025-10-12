@@ -7,5 +7,4 @@ const parseArguments = (...args: string[]): number[] => {
 
   return parsedArgs;
 };
-
-export default parseArguments
+export default parseArguments;
