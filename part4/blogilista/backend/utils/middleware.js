@@ -5,7 +5,7 @@ const requestLogger = (req, res, next) => {
   logger.info("Path:", req.path);
   logger.info("Body:", req.body);
   logger.info("---");
-  next()
+  next();
 };
 
 const unknownEndpoint = (req, res) => {
@@ -19,9 +19,16 @@ const errorHandler = (error, req, res, next) => {
     return res.status(400).send({ error: "malformatted id" });
   } else if (error.name === "ValidationError") {
     return res.status(400).json({ error: error.message });
+  } else if (
+    error.name === "MongoServerError" &&
+    error.message.includes("E11000 duplicate key error")
+  ) {
+    return response
+      .status(400)
+      .json({ error: "expect `username` to be unique" });
   }
 
-  next(error)
+  next(error);
 };
 
 module.exports = { requestLogger, unknownEndpoint, errorHandler };

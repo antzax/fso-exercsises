@@ -14,13 +14,14 @@ beforeEach(async () => {
   await Blog.insertMany(helper.initialBlogs);
 });
 
-describe("when there is notes in database", () => {
+describe("when there is blogs in database", () => {
   test("blogs are returned as json", async () => {
     await api
       .get(blogUrl)
       .expect(200)
       .expect("Content-Type", /application\/json/);
   });
+
 
   test("blogs have field id not __id", async () => {
     const blogs = await helper.blogsInDb();
